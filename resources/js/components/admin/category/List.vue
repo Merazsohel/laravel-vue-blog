@@ -2,7 +2,7 @@
 
     <div>
         <section class="content">
-            <div class="row">
+            <div class="row justify-content-around">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -20,16 +20,16 @@
                                 <tr>
                                     <th>Sl</th>
                                     <th>Name</th>
-                                    <th>Date</th>
+
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>01</td>
-                                    <td>Category Name
+                                <tr v-for="(category, index) in getallcategory" :key="category.id">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{category.cat_name}}
                                     </td>
-                                    <td>Date</td>
+
                                     <td>
                                         <a href="">Edit</a>
                                         <a href="">Delete</a>
@@ -54,7 +54,18 @@
 
 <script>
     export default {
-        name: "list"
+        name: "List",
+        mounted(){
+            this.$store.dispatch("allCategory")
+        },
+        computed:{
+            getallcategory(){
+                return this.$store.getters.getCategory
+            }
+        },
+        methods:{
+
+        }
     }
 </script>
 
