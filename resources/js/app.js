@@ -14,6 +14,11 @@ const store = new Vuex.Store(
         storeData
 )
 
+//Moment JS
+
+import {filter} from './filter'
+
+
 //Vue Router
 
 import VueRouter from 'vue-router'

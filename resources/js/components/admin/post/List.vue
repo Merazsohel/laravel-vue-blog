@@ -6,10 +6,10 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Category List</h3>
+                            <h3 class="card-title">Post List</h3>
                             <div class="card-tools">
                                 <button class="btn btn-primary">
-                                    <router-link to="/add-category" style="color:#fff"> Add Category</router-link>
+                                    <router-link to="/add-post" style="color:#fff"> Add Post</router-link>
                                 </button>
                             </div>
                         </div>
@@ -19,22 +19,28 @@
                                 <thead>
                                 <tr>
                                     <th>Sl</th>
-                                    <th>Name</th>
-                                    <th>Date</th>
-                                    <th>Actions</th>
+                                    <th>User</th>
+                                    <th>Category</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Photo</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="(category, index) in getallcategory" :key="category.id">
-                                    <td>{{ index + 1 }}</td>
-                                    <td>{{category.cat_name}} </td>
-                                    <td>{{category.created_at | timeformat}} </td>
+                                <tr  v-for="(post,index) in allpost">
+                                    <td>{{index + 1}}</td>
+                                    <td> User Name </td>
+                                    <td> Category </td>
+                                    <td> {{ post.title }} </td>
+                                    <td> {{ post.description }} </td>
+                                    <td><img :src="post.photo" alt="" height="50" width="50"> </td>
 
                                     <td>
-                                       <router-link :to="`/edit-category/${category.id}`">Edit</router-link>
-                                        <a href="" @click.prevent="deletecategory(category.id)">Delete</a>
+                                        <a>Edit</a>
+                                        <a href="" >Delete</a>
                                     </td>
-                                   
+
                                 </tr>
 
                                 </tbody>
@@ -54,29 +60,18 @@
 
 <script>
     export default {
-        name: "List",
+        name: "list",
         mounted(){
-            this.$store.dispatch("allCategory")
+            this.$store.dispatch('getAllPost')
+
         },
         computed:{
-            getallcategory(){
-                return this.$store.getters.getCategory
+            allpost(){
+                return this.$store.getters.getAllPost
             }
         },
         methods:{
-            deletecategory(id){
-                axios.get('/category/' + id)
-                    .then(()=>{
-                        this.$store.dispatch("allCategory")
-                        toast.fire({
-                            type: 'success',
-                            title: 'Category Deleted Successfully'
-                        })
-                    })
-                    .catch(()=>{
 
-                    })
-            }
         }
     }
 </script>

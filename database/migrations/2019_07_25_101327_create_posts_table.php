@@ -19,7 +19,7 @@ class CreatePostsTable extends Migration
             $table->integer('user_id')->nullable()->unsigned();
             $table->integer('comment_id')->nullable()->unsigned();
             $table->string('title')->nullable();
-            $table->text('desccription')->nullable();
+            $table->text('description')->nullable();
             $table->string('photo')->nullable();
             $table->timestamps();
         });
