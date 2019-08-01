@@ -10,7 +10,7 @@
                             <h3 class="card-title">Add New Post</h3>
                         </div>
 
-                        <form role="form" enctype="multipart/form-data">
+                        <form role="form" enctype="multipart/form-data" @submit.prevent="addnewPost()">
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="postId">Title</label>
@@ -20,9 +20,13 @@
 
 
                                 <div class="form-group">
-                                    <label for="descriptionId">Description</label>
-                                    <textarea class="form-control" id="descriptionId" placeholder="Description" v-model="form.description" name="description" :class="{ 'is-invalid': form.errors.has('description') }"></textarea>
+                                    <label >Description</label>
+
+
+                                    <markdown-editor v-model="form.description"></markdown-editor>
+
                                     <has-error :form="form" field="description"></has-error>
+
                                 </div>
 
                                 <div class="form-group">
@@ -86,12 +90,36 @@
         methods:{
             changePhoto(event){
                 let file = event.target.files[0];
-                let reader = new FileReader();
-                reader.onload = event => {
-                    this.form.photo = event.target.result
-                };
+                if(file.size > 1048576){
+                    swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!',
+                        footer: '<a href>Why do I have this issue?</a>'
+                    })
+                }else {
+                    let reader = new FileReader();
+                    reader.onload = event => {
+                        this.form.photo = event.target.result
+                    };
 
-                reader.readAsDataURL(file);
+                    reader.readAsDataURL(file);
+                }
+
+            },
+
+            addnewPost(){
+                this.form.post('/savepost')
+                    .then(()=>{
+                        this.$router.push('/post-list')
+                        toast.fire({
+                            type: 'success',
+                            title: 'Post Added successfully'
+                        })
+                    })
+                    .catch(()=>{
+
+                    })
             }
         }
     }
