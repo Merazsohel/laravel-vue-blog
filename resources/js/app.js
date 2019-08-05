@@ -1,6 +1,6 @@
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue/dist/vue.min.js'
 
 // Markdown Editor
 import 'v-markdown-editor/dist/index.css';
@@ -37,7 +37,8 @@ Vue.use(VueRouter)
 import {routes} from './routes';
 
 
-Vue.component('admin-main', require('./components/admin/AdminMaster.vue').default);
+Vue.component('admin-main', require('./components/admin/AdminMaster.vue').default)
+Vue.component('home-main', require('./components/public/PublicMaster').default)
 
 //V-Form
 

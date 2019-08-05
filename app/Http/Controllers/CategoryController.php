@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+
     public function add_category(Request $request){
         $this->validate($request,[
             'cat_name' => 'required|min:2|max:50'

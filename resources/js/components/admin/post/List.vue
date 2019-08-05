@@ -34,11 +34,11 @@
                                     <td v-if="post.category"> {{post.category.cat_name}} </td>
                                     <td> {{ post.title  | sortlength(20,"...") }} </td>
                                     <td> {{ post.description | sortlength(40,"...") }} </td>
-                                    <td><img :src="post.photo" alt="" height="50" width="50"> </td>
+                                    <td><img :src="ourImage(post.photo)" alt="" height="50" width="50"> </td>
 
                                     <td>
-                                        <a>Edit</a>
-                                        <a href="" >Delete</a>
+                                        <router-link :to="`edit-post/${post.id}`">Edit</router-link>
+                                        <a href="" @click.prevent="deletePost(post.id)">Delete</a>
                                     </td>
 
                                 </tr>
@@ -71,7 +71,22 @@
             }
         },
         methods:{
+            ourImage(img){
+                return "uploadimage/" + img;
+            },
+            deletePost(id){
+                axios.get('/delete/'+id)
+                    .then(()=>{
+                        this.$store.dispatch('getAllPost')
+                        toast.fire({
+                            type: 'success',
+                            title: 'Post Deleted successfully'
+                        })
+                    })
+                    .catch(()=>{
 
+                    })
+            }
         }
     }
 </script>

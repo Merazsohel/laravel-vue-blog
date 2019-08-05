@@ -1,10 +1,142 @@
 <template>
-    
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row justify-content-around">
+                <!-- left column -->
+                <div class="col-md-6">
+
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Update Post </h3>
+                        </div>
+
+                        <form role="form" enctype="multipart/form-data" @submit.prevent="updatePost()">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="postId">Title</label>
+                                    <input type="text" class="form-control" id="postId" placeholder="Title" v-model="form.title" name="title" :class="{ 'is-invalid': form.errors.has('title') }">
+                                    <has-error :form="form" field="title"></has-error>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label >Description</label>
+
+
+                                    <markdown-editor v-model="form.description"></markdown-editor>
+
+                                    <has-error :form="form" field="description"></has-error>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Select Category</label>
+                                    <select name="cat_id" class="form-control" :class="{ 'is-invalid': form.errors.has('cat_id') }" v-model="form.cat_id">
+                                        <option :value="category.id" v-for="category in getallcategory">{{category.cat_name}}</option>
+
+                                    </select>
+                                    <has-error :form="form" field="cat_id"></has-error>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Photo</label> <br/>
+                                    <input @change="changePhoto($event)" type="file"  name="photo" :class="{ 'is-invalid': form.errors.has('photo') }">
+                                    <img :src="updateImage()" alt="" width="150" height="150">
+                                    <has-error :form="form" field="photo"></has-error>
+                                </div>
+
+                            </div>
+                            <!-- /.card-body -->
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
 </template>
 
 <script>
     export default {
-        name: "edit"
+        name: "Edit",
+        data(){
+            return {
+                form: new Form({
+                    title:'',
+                    description:'',
+                    category_id:'',
+                    photo:'',
+                })
+            }
+        },
+
+        mounted(){
+            this.$store.dispatch("allCategory")
+        },
+
+        created(){
+          axios.get(`post/${this.$route.params.postid}`)
+              .then((response)=>{
+                  this.form.fill(response.data.post)
+              })
+        },
+
+        computed:{
+            getallcategory(){
+                return this.$store.getters.getCategory
+            }
+        },
+
+        methods:{
+            changePhoto(event){
+                let file = event.target.files[0];
+                if(file.size > 1048576){
+                    swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong!',
+                        footer: '<a href>Why do I have this issue?</a>'
+                    })
+                }else {
+                    let reader = new FileReader();
+                    reader.onload = event => {
+                        this.form.photo = event.target.result
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+
+            },
+
+            updatePost(){
+                this.form.post(`updatepost/${this.$route.params.postid}`)
+                    .then(()=>{
+                        this.$router.push('/post-list')
+                        toast.fire({
+                            type: 'success',
+                            title: 'Post Updated successfully'
+                        })
+                    })
+                    .catch(()=>{
+
+                    })
+            },
+            updateImage(){
+                let img = this.form.photo;
+                if(img.length > 100){
+                    return this.form.photo
+                }else{
+                    return "uploadimage/"+this.form.photo
+                }
+            }
+        }
     }
 </script>
 
