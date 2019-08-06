@@ -16,6 +16,7 @@ import EditPost from './components/admin/post/Edit'
 
 import PublicHome from './components/public/PublicHome'
 import BlogPost from './components/public/blog/BlogPost'
+import SinglePost from './components/public/blog/SingleBlog'
 
 
 export const routes = [
@@ -68,6 +69,11 @@ export const routes = [
     {
         path: '/blog',
         component: BlogPost
+    },
+
+    {
+        path: '/blog/:id',
+        component: SinglePost
     },
 
 ]

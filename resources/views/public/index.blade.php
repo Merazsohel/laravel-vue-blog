@@ -27,12 +27,7 @@
     <link rel="apple-touch-icon-precomposed" href="{{asset('assets/public/')}}/ico/apple-touch-icon-57-precomposed.png" />
     <link rel="shortcut icon" href="{{asset('assets/public/')}}/ico/favicon.png" />
 
-    <!-- =======================================================
-      Theme Name: Flattern
-      Theme URL: https://bootstrapmade.com/flattern-multipurpose-bootstrap-template/
-      Author: BootstrapMade.com
-      Author URL: https://bootstrapmade.com
-    ======================================================= -->
+
 </head>
 
 <body>
@@ -170,7 +165,7 @@
             <div class="row">
                 <div class="span4">
                     <div class="logo">
-                        <a href="index.html"><img src="{{asset('assets/public/')}}/img/logo.png" alt="" class="logo" /></a>
+                        <router-link to="/"><img src="{{asset('assets/public/')}}/img/logo.png" alt="" class="logo" /></router-link>
                         <h1>Flat and trendy bootstrap template</h1>
                     </div>
                 </div>
@@ -305,12 +300,7 @@
                                 <span>&copy; Flattern - All right reserved.</span>
                             </p>
                             <div class="credits">
-                                <!--
-                                  All the links in the footer should remain intact.
-                                  You can delete the links only if you purchased the pro version.
-                                  Licensing information: https://bootstrapmade.com/license/
-                                  Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Flattern
-                                -->
+
                                 Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
                             </div>
                         </div>

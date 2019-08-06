@@ -1,7 +1,5 @@
 <?php
 
-
-
 Route::get('/', function () {
     return view('public.index');
 });
@@ -9,9 +7,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
 //Route::get('/{anypath}','HomeController@index')->where('path','.*');
-
-
 
 
 Route::group(['middleware' => ['auth']], function () {
@@ -32,3 +29,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/post/{id}', 'PostController@edit_post');
     Route::post('/updatepost/{id}', 'PostController@update_post');
 });
+
+
+//FrontEnd
+
+Route::get('blogpost','BlogController@get_all_blog_post');
+Route::get('singlepost/{id}','BlogController@getpost_by_id');
+Route::get('categories','BlogController@get_all_category');
