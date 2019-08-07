@@ -5,14 +5,14 @@
         <div class="row">
           <div class="span4">
             <div class="inner-heading">
-              <h2>Blog left sidebar</h2>
+              <h2>Blog left sidebar </h2>
             </div>
           </div>
           <div class="span8">
             <ul class="breadcrumb">
               <li><a href="#"><i class="icon-home"></i></a><i class="icon-angle-right"></i></li>
               <li><a href="#">Blog</a><i class="icon-angle-right"></i></li>
-              <li class="active">Blog with left sidebar</li>
+              <li class="active">Blog with left sidebar </li>
             </ul>
           </div>
         </div>
@@ -67,8 +67,7 @@
 
     import BlogSidebar from "./BlogSidebar.vue"
     export default {
-        name: "blog-post",
-
+        name: "BlogPost",
         components:{
             BlogSidebar
         },
@@ -76,12 +75,23 @@
             this.$store.dispatch('getblogPost');
         },
         computed:{
-        blogpost(){
-            return this.$store.getters.getblogPost
-        }
+            blogpost(){
+                return this.$store.getters.getblogPost
+            }
         },
         methods:{
-
+            getAllCategoryPost(){
+                if(this.$route.params.id!=null){
+                    this.$store.dispatch('getPostByCatId',this.$route.params.id);
+                }else{
+                    this.$store.dispatch('getblogPost');
+                }
+            }
+        },
+        watch:{
+            $route(to,from){
+                this.getAllCategoryPost();
+            }
         }
     }
 </script>

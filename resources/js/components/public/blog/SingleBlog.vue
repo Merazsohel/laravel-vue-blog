@@ -12,7 +12,7 @@
                       <h3><a href="#">{{singlepost.title}}</a></h3>
 
                     </div>
-                    <img :src="`uploadimage/${singlepost.photo}`" alt="" />
+                    <img :src="`uploadimage/${singlepost.photo}`" alt="" width="800"/>
                   </div>
                   <p>
                    {{singlepost.description}}
@@ -40,7 +40,9 @@
 <script>
     import BlogSidebar from "./BlogSidebar.vue"
     export default {
+
         name: "SingleBlog",
+
         components:{
             BlogSidebar
         },
@@ -51,11 +53,20 @@
         },
 
         methods:{
+            singlePost(){
+                this.$store.dispatch('getPostById', this.$route.params.id)
+            }
+        },
 
-        },
         mounted(){
-         this.$store.dispatch('getPostById', this.$route.params.id)
+            this.singlePost();
         },
+        watch:{
+            $route(to,from){
+                this.singlePost();
+            }
+        }
+
     }
 </script>
 
