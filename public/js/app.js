@@ -5483,6 +5483,11 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.$store.dispatch('getblogPost');
     this.$store.dispatch('allcategories');
+  },
+  methods: {
+    RealSearch: function RealSearch() {
+      this.$store.dispatch('SearchPost', this.keyword);
+    }
   }
 });
 
@@ -85706,8 +85711,26 @@ var render = function() {
         _c("div", { staticClass: "widget" }, [
           _c("form", { staticClass: "form-search" }, [
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.keyword,
+                  expression: "keyword"
+                }
+              ],
               staticClass: "input-medium search-query",
-              attrs: { placeholder: "Type something", type: "text" }
+              attrs: { placeholder: "Type something", type: "text" },
+              domProps: { value: _vm.keyword },
+              on: {
+                keyup: _vm.RealSearch,
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.keyword = $event.target.value
+                }
+              }
             }),
             _vm._v(" "),
             _c(
@@ -85715,12 +85738,11 @@ var render = function() {
               {
                 staticClass: "btn btn-square btn-theme",
                 attrs: { type: "submit" },
-                model: {
-                  value: _vm.keyword,
-                  callback: function($$v) {
-                    _vm.keyword = $$v
-                  },
-                  expression: "keyword"
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.RealSearch($event)
+                  }
                 }
               },
               [_vm._v("Search")]
@@ -102908,8 +102930,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     getPostByCatId: function getPostByCatId(context, payload) {
       axios.get('/categorypost/' + payload).then(function (response) {
-        console.log(response.data.posts);
         context.commit('getPostByCatId', response.data.posts);
+      });
+    },
+    SearchPost: function SearchPost(context, payload) {
+      axios.get('/search?s=' + payload).then(function (response) {
+        context.commit('getSearchPost', response.data.posts);
       });
     }
   },
@@ -102930,6 +102956,9 @@ __webpack_require__.r(__webpack_exports__);
       state.allcategories = payload;
     },
     getPostByCatId: function getPostByCatId(state, payload) {
+      state.blogpost = payload;
+    },
+    getSearchPost: function getSearchPost(state, payload) {
       state.blogpost = payload;
     }
   }
