@@ -15,9 +15,18 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="example2" class="table table-bordered table-hover text-center">
                                 <thead>
                                 <tr>
+                                    <th>
+                                        <select name="" id="" @change="deleteSelected" v-model="select">
+                                            <option value="">Select</option>
+                                            <option value="">Delete All</option>
+                                        </select>
+                                        <input type="checkbox" @click.prevent="selectAll" v-model="all_select">
+                                        <span v-if="all_select==false">Check All</span>
+                                        <span v-else>Uncheck All</span>
+                                    </th>
                                     <th>Sl</th>
                                     <th>Name</th>
                                     <th>Date</th>
@@ -26,6 +35,7 @@
                                 </thead>
                                 <tbody>
                                 <tr v-for="(category, index) in getallcategory" :key="category.id">
+                                    <td style="width: 60px"><input type="checkbox" v-model="categoryItem" :value="category.id"></td>
                                     <td>{{ index + 1 }}</td>
                                     <td>{{category.cat_name}} </td>
                                     <td>{{category.created_at | timeformat}} </td>
@@ -55,6 +65,13 @@
 <script>
     export default {
         name: "List",
+        data(){
+            return{
+                categoryItem:[],
+                select:'',
+                all_select:false
+            }
+        },
         mounted(){
             this.$store.dispatch("allCategory")
         },
@@ -76,6 +93,33 @@
                     .catch(()=>{
 
                     })
+            },
+            deleteSelected(){
+                axios.get('/deletecategory/'+this.categoryItem)
+                    .then(()=>{
+                        this.categoryItem = []
+                        this.$store.dispatch("allCategory")
+                        toast.fire({
+                            type: 'success',
+                            title: 'Category Deleted Successfully'
+                        })
+                    })
+                    .catch(()=>{
+
+                    })
+            },
+            selectAll(){
+                if(this.all_select == false){
+                    this.all_select = true
+                    for(let category in this.getallcategory){
+                        this.categoryItem.push(this.getallcategory[category].id)
+
+                    }
+                }else {
+                    this.all_select = false
+                    this.categoryItem = []
+                }
+
             }
         }
     }

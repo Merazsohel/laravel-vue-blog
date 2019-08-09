@@ -46,4 +46,11 @@ class BlogController extends Controller
            'posts'=>$posts
        ],200);
    }
+
+   public function latestpost(){
+       $posts = Post::with('user','category')->orderBy('id','desc')->get();
+       return response()->json([
+           'posts' => $posts
+       ],200);
+   }
 }

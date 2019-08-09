@@ -4452,8 +4452,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "List",
+  data: function data() {
+    return {
+      categoryItem: [],
+      select: '',
+      all_select: false
+    };
+  },
   mounted: function mounted() {
     this.$store.dispatch("allCategory");
   },
@@ -4474,6 +4491,32 @@ __webpack_require__.r(__webpack_exports__);
           title: 'Category Deleted Successfully'
         });
       })["catch"](function () {});
+    },
+    deleteSelected: function deleteSelected() {
+      var _this2 = this;
+
+      axios.get('/deletecategory/' + this.categoryItem).then(function () {
+        _this2.categoryItem = [];
+
+        _this2.$store.dispatch("allCategory");
+
+        toast.fire({
+          type: 'success',
+          title: 'Category Deleted Successfully'
+        });
+      })["catch"](function () {});
+    },
+    selectAll: function selectAll() {
+      if (this.all_select == false) {
+        this.all_select = true;
+
+        for (var category in this.getallcategory) {
+          this.categoryItem.push(this.getallcategory[category].id);
+        }
+      } else {
+        this.all_select = false;
+        this.categoryItem = [];
+      }
     }
   }
 });
@@ -5428,6 +5471,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -5465,6 +5510,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "blog-sidebar",
   data: function data() {
@@ -5477,17 +5523,17 @@ __webpack_require__.r(__webpack_exports__);
       return this.$store.getters.allcategories;
     },
     blogpost: function blogpost() {
-      return this.$store.getters.getblogPost;
+      return this.$store.getters.latestpost;
     }
   },
   mounted: function mounted() {
-    this.$store.dispatch('getblogPost');
+    this.$store.dispatch('latestPost');
     this.$store.dispatch('allcategories');
   },
   methods: {
-    RealSearch: function RealSearch() {
+    RealSearch: lodash__WEBPACK_IMPORTED_MODULE_0___default.a.debounce(function () {
       this.$store.dispatch('SearchPost', this.keyword);
-    }
+    }, 1000)
   }
 });
 
@@ -83837,16 +83883,160 @@ var render = function() {
               _c(
                 "table",
                 {
-                  staticClass: "table table-bordered table-hover",
+                  staticClass: "table table-bordered table-hover text-center",
                   attrs: { id: "example2" }
                 },
                 [
-                  _vm._m(0),
+                  _c("thead", [
+                    _c("tr", [
+                      _c("th", [
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.select,
+                                expression: "select"
+                              }
+                            ],
+                            attrs: { name: "", id: "" },
+                            on: {
+                              change: [
+                                function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.select = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                },
+                                _vm.deleteSelected
+                              ]
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "" } }, [
+                              _vm._v("Select")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "" } }, [
+                              _vm._v("Delete All")
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.all_select,
+                              expression: "all_select"
+                            }
+                          ],
+                          attrs: { type: "checkbox" },
+                          domProps: {
+                            checked: Array.isArray(_vm.all_select)
+                              ? _vm._i(_vm.all_select, null) > -1
+                              : _vm.all_select
+                          },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.selectAll($event)
+                            },
+                            change: function($event) {
+                              var $$a = _vm.all_select,
+                                $$el = $event.target,
+                                $$c = $$el.checked ? true : false
+                              if (Array.isArray($$a)) {
+                                var $$v = null,
+                                  $$i = _vm._i($$a, $$v)
+                                if ($$el.checked) {
+                                  $$i < 0 &&
+                                    (_vm.all_select = $$a.concat([$$v]))
+                                } else {
+                                  $$i > -1 &&
+                                    (_vm.all_select = $$a
+                                      .slice(0, $$i)
+                                      .concat($$a.slice($$i + 1)))
+                                }
+                              } else {
+                                _vm.all_select = $$c
+                              }
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.all_select == false
+                          ? _c("span", [_vm._v("Check All")])
+                          : _c("span", [_vm._v("Uncheck All")])
+                      ]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("Sl")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("Name")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("Date")]),
+                      _vm._v(" "),
+                      _c("th", [_vm._v("Actions")])
+                    ])
+                  ]),
                   _vm._v(" "),
                   _c(
                     "tbody",
                     _vm._l(_vm.getallcategory, function(category, index) {
                       return _c("tr", { key: category.id }, [
+                        _c("td", { staticStyle: { width: "60px" } }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.categoryItem,
+                                expression: "categoryItem"
+                              }
+                            ],
+                            attrs: { type: "checkbox" },
+                            domProps: {
+                              value: category.id,
+                              checked: Array.isArray(_vm.categoryItem)
+                                ? _vm._i(_vm.categoryItem, category.id) > -1
+                                : _vm.categoryItem
+                            },
+                            on: {
+                              change: function($event) {
+                                var $$a = _vm.categoryItem,
+                                  $$el = $event.target,
+                                  $$c = $$el.checked ? true : false
+                                if (Array.isArray($$a)) {
+                                  var $$v = category.id,
+                                    $$i = _vm._i($$a, $$v)
+                                  if ($$el.checked) {
+                                    $$i < 0 &&
+                                      (_vm.categoryItem = $$a.concat([$$v]))
+                                  } else {
+                                    $$i > -1 &&
+                                      (_vm.categoryItem = $$a
+                                        .slice(0, $$i)
+                                        .concat($$a.slice($$i + 1)))
+                                  }
+                                } else {
+                                  _vm.categoryItem = $$c
+                                }
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(index + 1))]),
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(category.cat_name) + " ")]),
@@ -83898,24 +84088,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", [_vm._v("Sl")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Name")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Date")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Actions")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -102882,7 +103055,8 @@ __webpack_require__.r(__webpack_exports__);
     post: [],
     blogpost: [],
     singlepost: [],
-    allcategories: []
+    allcategories: [],
+    latestpost: []
   },
   getters: {
     getCategory: function getCategory(state) {
@@ -102899,6 +103073,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     allcategories: function allcategories(state) {
       return state.allcategories;
+    },
+    latestpost: function latestpost(state) {
+      return state.latestpost;
     }
   },
   actions: {
@@ -102914,7 +103091,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     getblogPost: function getblogPost(context) {
       axios.get('/blogpost').then(function (response) {
-        // console.log(response.data)
         context.commit('getblogPost', response.data.posts);
       });
     },
@@ -102936,6 +103112,11 @@ __webpack_require__.r(__webpack_exports__);
     SearchPost: function SearchPost(context, payload) {
       axios.get('/search?s=' + payload).then(function (response) {
         context.commit('getSearchPost', response.data.posts);
+      });
+    },
+    latestPost: function latestPost(context) {
+      axios.get('/latestpost').then(function (response) {
+        context.commit('latestpost', response.data.posts);
       });
     }
   },
@@ -102960,6 +103141,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     getSearchPost: function getSearchPost(state, payload) {
       state.blogpost = payload;
+    },
+    latestpost: function latestpost(state, payload) {
+      state.latestpost = payload;
     }
   }
 });

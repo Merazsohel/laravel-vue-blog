@@ -36,6 +36,7 @@
 </template>
 
 <script>
+  import _ from 'lodash'
     export default {
         name: "blog-sidebar",
         data(){
@@ -49,18 +50,18 @@
         },
 
         blogpost(){
-            return this.$store.getters.getblogPost
+            return this.$store.getters.latestpost
         }
         },
 
         mounted(){
-            this.$store.dispatch('getblogPost')
+            this.$store.dispatch('latestPost')
             this.$store.dispatch('allcategories')
         },
         methods:{
-            RealSearch(){
+            RealSearch:_.debounce(function () {
                 this.$store.dispatch('SearchPost',this.keyword)
-            }
+            },1000)
         }
     }
 </script>
