@@ -38,7 +38,7 @@ Vue.use(VueRouter)
 import {routes} from './routes';
 
 
-Vue.component('admin-main', require('./components/admin/AdminMaster.vue').default)
+Vue.component('admin-main', require('./components/admin/adminMaster').default)
 Vue.component('home-main', require('./components/public/PublicMaster').default)
 
 //V-Form
