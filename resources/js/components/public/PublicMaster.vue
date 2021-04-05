@@ -2,7 +2,7 @@
     <router-view></router-view>
 </template>
 
-<script>
+<script type="application/javascript">
     export default {
         name: "public-master"
     }

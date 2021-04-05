@@ -37,7 +37,7 @@
    </span>
 </template>
 
-<script>
+<script type="application/javascript">
     import BlogSidebar from "./BlogSidebar.vue"
     export default {
 

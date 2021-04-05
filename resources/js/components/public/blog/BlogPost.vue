@@ -18,6 +18,7 @@
         </div>
       </div>
     </section>
+
     <section id="content">
       <div class="container">
         <div class="row">
@@ -32,16 +33,17 @@
                     <img :src="`uploadimage/${post.photo}`" alt="" width="800" height="200"/>
                   </div>
                   <p>
-                   {{post.description | sortlength(100,"...")}}
+                   {{post.description}}
                   </p>
                   <div class="bottom-article">
                     <ul class="meta-post">
-                      <li><i class="icon-calendar"></i><a href="#">{{post.created_at | timeformat}}</a></li>
+                      <li><i class="icon-calendar"></i><a href="#">{{post.created_at}}</a></li>
                       <li><i class="icon-user"></i><a href="#"> {{post.user.name}}</a></li>
                       <li><i class="icon-folder-open"></i><a href="#"> {{post.category.cat_name}}</a></li>
                       <li><i class="icon-comments"></i><a href="#">4 Comments</a></li>
                     </ul>
-                     <router-link :to="`/blog/${post.id}`" class="pull-right">Continue reading <i class="icon-angle-right"></i></router-link>
+                     <router-link :to="`/blog/${post.id}`" class="pull-right">Continue reading <i
+                         class="icon-angle-right"></i></router-link>
                   </div>
                 </div>
               </div>
@@ -55,7 +57,7 @@
             </div>
           </div>
 
-<BlogSidebar/>
+            <BlogSidebar/>
 
         </div>
       </div>
@@ -63,39 +65,35 @@
  </span>
 </template>
 
-<script>
-
+<script type="application/javascript">
     import BlogSidebar from "./BlogSidebar.vue"
+
     export default {
         name: "BlogPost",
-        components:{
+        components: {
             BlogSidebar
         },
-        mounted(){
+        mounted() {
             this.$store.dispatch('getblogPost');
         },
-        computed:{
-            blogpost(){
+        computed: {
+            blogpost() {
                 return this.$store.getters.getblogPost
             }
         },
-        methods:{
-            getAllCategoryPost(){
-                if(this.$route.params.id!=null){
-                    this.$store.dispatch('getPostByCatId',this.$route.params.id);
-                }else{
+        methods: {
+            getAllCategoryPost() {
+                if (this.$route.params.id != null) {
+                    this.$store.dispatch('getPostByCatId', this.$route.params.id);
+                } else {
                     this.$store.dispatch('getblogPost');
                 }
             }
         },
-        watch:{
-            $route(to,from){
+        watch: {
+            $route(to, from) {
                 this.getAllCategoryPost();
             }
         }
     }
 </script>
-
-<style scoped>
-
-</style>

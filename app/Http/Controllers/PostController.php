@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,21 +9,23 @@ use Image;
 
 class PostController extends Controller
 {
-    public function all_post(){
-       $posts = Post::with('user','category')->orderBy('id','desc')->get();
-       return response()->json([
-           'posts' => $posts
-       ],200);
+    public function all_post()
+    {
+        $posts = Post::with('user', 'category')->orderBy('id', 'desc')->get();
+        return response()->json([
+            'posts' => $posts
+        ], 200);
     }
 
-    public function save_post(Request $request){
-        $strpos = strpos($request->photo,';');
-        $sub = substr($request->photo,'0',$strpos);
-        $ex = explode('/',$sub)[1];
-        $name = time().".".$ex;
+    public function save_post(Request $request)
+    {
+        $strpos = strpos($request->photo, ';');
+        $sub = substr($request->photo, '0', $strpos);
+        $ex = explode('/', $sub)[1];
+        $name = time() . "." . $ex;
         $img = Image::make($request->photo)->resize(300, 200);
-        $upload_path = public_path()."/uploadimage/";
-        $img->save($upload_path.$name);
+        $upload_path = public_path() . "/uploadimage/";
+        $img->save($upload_path . $name);
 
         $post = new Post();
         $post->title = $request->title;
@@ -36,38 +37,42 @@ class PostController extends Controller
 
     }
 
-    public function delete_post($id){
+    public function delete_post($id)
+    {
         $post = Post::find($id);
-        $image_path = public_path()."/uploadimage/";
-        $image = $image_path. $post->photo;
-        if (file_exists($image)){
+        $image_path = public_path() . "/uploadimage/";
+        $image = $image_path . $post->photo;
+        if (file_exists($image)) {
             @unlink($image);
         }
         $post->delete();
     }
-    public function edit_post($id){
+
+    public function edit_post($id)
+    {
         $post = Post::find($id);
         return response()->json([
             'post' => $post
-        ],200);
+        ], 200);
     }
 
-    public function update_post(Request $request,$id){
+    public function update_post(Request $request, $id)
+    {
         $post = Post::find($id);
 
-        if ($request->photo != $post->photo){
-            $strpos = strpos($request->photo,';');
-            $sub = substr($request->photo,'0',$strpos);
-            $ex = explode('/',$sub)[1];
-            $name = time().".".$ex;
+        if ($request->photo != $post->photo) {
+            $strpos = strpos($request->photo, ';');
+            $sub = substr($request->photo, '0', $strpos);
+            $ex = explode('/', $sub)[1];
+            $name = time() . "." . $ex;
             $img = Image::make($request->photo)->resize(300, 200);
-            $upload_path = public_path()."/uploadimage/";
-            $img->save($upload_path.$name);
-            $image = $upload_path. $post->photo;
-            if (file_exists($image)){
+            $upload_path = public_path() . "/uploadimage/";
+            $img->save($upload_path . $name);
+            $image = $upload_path . $post->photo;
+            if (file_exists($image)) {
                 @unlink($image);
             }
-        }else{
+        } else {
             $name = $post->photo;
         }
 

@@ -18,22 +18,16 @@
                                     <has-error :form="form" field="title"></has-error>
                                 </div>
 
-
                                 <div class="form-group">
                                     <label >Description</label>
-
-
                                     <markdown-editor v-model="form.description"></markdown-editor>
-
                                     <has-error :form="form" field="description"></has-error>
-
                                 </div>
 
                                 <div class="form-group">
                                     <label>Select Category</label>
                                     <select name="cat_id" class="form-control" :class="{ 'is-invalid': form.errors.has('cat_id') }" v-model="form.cat_id">
                                         <option :value="category.id" v-for="category in getallcategory">{{category.cat_name}}</option>
-
                                     </select>
                                     <has-error :form="form" field="cat_id"></has-error>
                                 </div>
@@ -46,20 +40,15 @@
                                 </div>
 
                             </div>
-                            <!-- /.card-body -->
 
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Save</button>
                             </div>
                         </form>
                     </div>
-                    <!-- /.card -->
-
                 </div>
-
             </div>
-            <!-- /.row -->
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
 </template>
 
@@ -139,7 +128,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
